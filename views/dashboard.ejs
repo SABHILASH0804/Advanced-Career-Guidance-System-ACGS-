@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <script src="https://unpkg.com/gojs/release/go.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1200px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #e9ecef;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        #myDiagramDiv {
+            width: 100%;
+            height: 600px;
+            border: 1px solid black;
+            margin-top: 20px;
+            background-color: white;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to Your Dashboard</h2>
+
+    <div class="container">
+        <h3>Your Extracted Skills:</h3>
+        <div id="skills-container">
+            <p id="skills-text">Loading skills...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>Suggested Career Progression Paths:</h3>
+        <div id="roles-container">
+            <p id="roles-text">Fetching career suggestions...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>Career Progression Visualization:</h3>
+        <div id="myDiagramDiv"></div>
+    </div>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="resume" accept=".pdf" required>
+        <button type="submit">Upload Resume</button>
+    </form>
+
+    <a href="/logout">Logout</a>
+
+    <script>
+        async function fetchSkillsAndRoles() {
+            try {
+                const skillsRes = await fetch("/api/skills");
+                const skillsData = await skillsRes.json();
+                document.getElementById("skills-text").innerText = skillsData.skills || "No skills found";
+
+                const rolesRes = await fetch("/api/career-path");
+                const rolesData = await rolesRes.json();
+
+                const rolesContainer = document.getElementById("roles-container");
+                rolesContainer.innerHTML = "";
+
+                let nodeDataArray = [{ key: "Career Path", text: "Career Path", category: "Root" }];
+                let linkDataArray = [];
+                let validSkills = new Set();
+                let colors = ["#FFB6C1", "#87CEFA", "#98FB98", "#FFD700", "#FFA07A"];
+                let colorIndex = 0;
+                let skillColorMap = {};
+
+                if (Object.keys(rolesData.careerPaths).length > 0) {
+                    for (const skill in rolesData.careerPaths) {
+                        const careerRoles = rolesData.careerPaths[skill];
+                        if (careerRoles.length > 0) {
+                            validSkills.add(skill);
+                            let skillColor = colors[colorIndex % colors.length];
+                            skillColorMap[skill] = skillColor;
+                            colorIndex++;
+
+                            nodeDataArray.push({ key: skill, text: skill, isSkill: true, color: skillColor, icon: "💡" });
+                            linkDataArray.push({ from: "Career Path", to: skill });
+
+                            const roleList = careerRoles.map(role => {
+                                nodeDataArray.push({ key: role, text: role, color: skillColor, icon: "📌" });
+                                linkDataArray.push({ from: skill, to: role });
+                                return `<li>${role}</li>`;
+                            }).join("");
+
+                            rolesContainer.innerHTML += `<h4>${skill} Career Path:</h4><ul>${roleList}</ul>`;
+                        }
+                    }
+                } else {
+                    rolesContainer.innerHTML = "<p>No career suggestions found.</p>";
+                }
+
+                nodeDataArray = nodeDataArray.filter(node => node.key === "Career Path" || validSkills.has(node.key) || !node.isSkill);
+                
+                loadGoJSTree(nodeDataArray, linkDataArray);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById("roles-container").innerText = "Error loading career paths.";
+            }
+        }
+
+        function loadGoJSTree(nodeDataArray, linkDataArray) {
+            var $ = go.GraphObject.make;
+            var myDiagram = $(go.Diagram, "myDiagramDiv", {
+                "undoManager.isEnabled": true,
+                layout: $(go.TreeLayout, {
+                    angle: 0,
+                    layerSpacing: 170,
+                    nodeSpacing: 30,
+                    alignment: go.TreeLayout.AlignmentStart,
+                    compaction: go.TreeLayout.CompactionNone
+                }),
+                "allowHorizontalScroll": false,
+                "allowVerticalScroll": true
+            });
+
+            myDiagram.nodeTemplate = $(go.Node, "Auto",
+                { isTreeExpanded: false }, 
+                $(go.Shape, "RoundedRectangle", {
+                    fill: "white", strokeWidth: 2
+                },
+                    new go.Binding("fill", "color")
+                ),
+                $(go.Panel, "Horizontal",
+                    { margin: 5 },
+                    $(go.TextBlock, { margin: 8, font: "bold 12px sans-serif" },
+                        new go.Binding("text", "text")
+                    ),
+                    $(go.TextBlock, { margin: 5, font: "14px sans-serif" },
+                        new go.Binding("text", "icon")
+                    ),
+                    $("TreeExpanderButton", {
+                        width: 14, height: 14,
+                        visible: new go.Binding("isSkill").ofObject()
+                    })
+                )
+            );
+
+            myDiagram.linkTemplate = $(go.Link,
+                $(go.Shape, { stroke: "black", strokeWidth: 2 }),
+                $(go.Shape, { toArrow: "Standard", stroke: "black", fill: "black" })
+            );
+
+            myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+        }
+
+        window.onload = fetchSkillsAndRoles;
+    </script>
+</body>
+</html>
