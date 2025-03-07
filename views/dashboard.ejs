@@ -43,10 +43,60 @@
             background-color: white;
             overflow: hidden;
         }
+        .state-filter {
+            margin-bottom: 20px;
+        }
+        .state-filter label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .state-filter select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
     <h2>Welcome to Your Dashboard</h2>
+
+    <!-- State Filter Dropdown -->
+    <div class="state-filter">
+        <label for="state-select">Select State:</label>
+        <select id="state-select">
+            <option value="India">All India</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Chhattisgarh">Chhattisgarh</option>
+            <option value="Goa">Goa</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Himachal Pradesh">Himachal Pradesh</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Manipur">Manipur</option>
+            <option value="Meghalaya">Meghalaya</option>
+            <option value="Mizoram">Mizoram</option>
+            <option value="Nagaland">Nagaland</option>
+            <option value="Odisha">Odisha</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Sikkim">Sikkim</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Tripura">Tripura</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Uttarakhand">Uttarakhand</option>
+            <option value="West Bengal">West Bengal</option>
+            
+        </select>
+        <button onclick="fetchJobRecommendations()">Fetch Jobs</button>
+    </div>
 
     <div class="container">
         <h3>Your Extracted Skills:</h3>
@@ -59,6 +109,13 @@
         <h3>Suggested Career Progression Paths:</h3>
         <div id="roles-container">
             <p id="roles-text">Fetching career suggestions...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>Job Recommendations:</h3>
+        <div id="jobs-container">
+            <p id="jobs-text">Fetching job recommendations...</p>
         </div>
     </div>
 
@@ -106,10 +163,11 @@
                             nodeDataArray.push({ key: skill, text: skill, isSkill: true, color: skillColor, icon: "💡" });
                             linkDataArray.push({ from: "Career Path", to: skill });
 
-                            const roleList = careerRoles.map(role => {
-                                nodeDataArray.push({ key: role, text: role, color: skillColor, icon: "📌" });
+                            const roleList = careerRoles.map((role, index) => {
+                                const numberedRole = `${index + 1}. ${role}`; // Add numbering to roles
+                                nodeDataArray.push({ key: role, text: numberedRole, color: skillColor, icon: "📌" });
                                 linkDataArray.push({ from: skill, to: role });
-                                return `<li>${role}</li>`;
+                                return `<li>${numberedRole}</li>`; // Add numbering to the HTML list
                             }).join("");
 
                             rolesContainer.innerHTML += `<h4>${skill} Career Path:</h4><ul>${roleList}</ul>`;
@@ -122,12 +180,44 @@
                 nodeDataArray = nodeDataArray.filter(node => node.key === "Career Path" || validSkills.has(node.key) || !node.isSkill);
                 
                 loadGoJSTree(nodeDataArray, linkDataArray);
+
+                // Fetch job recommendations for the default state (India)
+                await fetchJobRecommendations();
             } catch (error) {
                 console.error("Error fetching data:", error);
                 document.getElementById("roles-container").innerText = "Error loading career paths.";
+                document.getElementById("jobs-container").innerText = "Error loading job recommendations.";
             }
         }
 
+            async function fetchJobRecommendations() {
+                const state = document.getElementById("state-select").value;
+                try {
+                    const jobsRes = await fetch(`/api/job-recommendations?state=${encodeURIComponent(state)}`);
+                    const jobsData = await jobsRes.json();
+                    const jobsContainer = document.getElementById("jobs-container");
+                    jobsContainer.innerHTML = "";
+        
+                    if (jobsData.skillWiseJobs && Object.keys(jobsData.skillWiseJobs).length > 0) {
+                        for (const skill in jobsData.skillWiseJobs) {
+                            const jobList = jobsData.skillWiseJobs[skill].map((job, index) => {
+                                return `<li>
+                                    <strong>${job.title}</strong> - ${job.company_name} (${job.location})<br>
+                                    <a href="${job.link}" target="_blank">View Job</a>
+                                </li>`;
+                            }).join("");
+        
+                            jobsContainer.innerHTML += `<h4>${skill} Jobs:</h4><ul>${jobList}</ul>`;
+                        }
+                    } else {
+                        jobsContainer.innerHTML = "<p>No job recommendations found.</p>";
+                    }
+                } catch (error) {
+                    console.error("Error fetching job recommendations:", error);
+                    document.getElementById("jobs-container").innerText = "Error loading job recommendations.";
+                }
+            }
+        
         function loadGoJSTree(nodeDataArray, linkDataArray) {
             var $ = go.GraphObject.make;
             var myDiagram = $(go.Diagram, "myDiagramDiv", {

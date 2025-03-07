@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const mysql = require("./db");
 const extractSkills = require("./resumeParser");
+const { getJson } = require("serpapi"); // Import SerpAPI
 
 const app = express();
 app.use(express.json());
@@ -23,8 +24,8 @@ app.set("views", path.join(__dirname, "views"));
 // Multer Configuration for File Uploads
 const upload = multer({ dest: "uploads/" });
 
-// Career Progression Dataset
-const careerProgression = {
+// Career Progression Dataset (unchanged)
+const careerProgression =  {
     "Python": ["Junior Python Developer", "Python Developer", "Senior Python Developer", "Lead Software Engineer", "Software Architect"],
     "Java": ["Junior Java Developer", "Java Developer", "Senior Java Developer", "Lead Software Engineer", "Java Solutions Architect"],
     "C++": ["Junior C++ Developer", "C++ Developer", "Senior C++ Developer", "Lead Software Engineer", "Embedded Systems Engineer"],
@@ -99,12 +100,12 @@ const careerProgression = {
     "Budgeting": ["Finance Assistant", "Budget Analyst", "Senior Budget Manager", "CFO"]
 };
 
-// Home Page - Login & Signup
+// Home Page - Login & Signup (unchanged)
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
-// User Signup
+// User Signup (unchanged)
 app.post("/signup", async (req, res) => {
     const { name, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -121,7 +122,7 @@ app.post("/signup", async (req, res) => {
     );
 });
 
-// User Login
+// User Login (unchanged)
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
 
@@ -137,7 +138,7 @@ app.post("/login", (req, res) => {
     });
 });
 
-// Dashboard - Display User Skills
+// Dashboard - Display User Skills (unchanged)
 app.get("/dashboard", (req, res) => {
     if (!req.session.userId) return res.redirect("/");
 
@@ -148,7 +149,7 @@ app.get("/dashboard", (req, res) => {
     });
 });
 
-// Upload & Parse Resume
+// Upload & Parse Resume (unchanged)
 app.post("/upload", upload.single("resume"), async (req, res) => {
     if (!req.session.userId) return res.status(401).send("Login required");
 
@@ -183,7 +184,7 @@ app.post("/upload", upload.single("resume"), async (req, res) => {
     }
 });
 
-// API to Fetch Skills for Frontend
+// API to Fetch Skills for Frontend (unchanged)
 app.get("/api/skills", (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: "Unauthorized" });
 
@@ -194,7 +195,7 @@ app.get("/api/skills", (req, res) => {
     });
 });
 
-// API to Fetch Career Progression
+// API to Fetch Career Progression (unchanged)
 app.get("/api/career-path", (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: "Unauthorized" });
 
@@ -215,8 +216,63 @@ app.get("/api/career-path", (req, res) => {
     });
 });
 
+// API to Fetch Job Recommendations
+// ... (previous code remains unchanged)
 
-// Logout
+// API to Fetch Job Recommendations (updated to include job links)
+// API to Fetch Job Recommendations for India
+// API to Fetch Job Recommendations with State Filtering
+app.get("/api/job-recommendations", async (req, res) => {
+    if (!req.session.userId) return res.status(401).json({ error: "Unauthorized" });
+
+    const state = req.query.state || "India"; // Default to "India" if no state is provided
+
+    try {
+        // Fetch user skills from the database
+        const results = await new Promise((resolve, reject) => {
+            mysql.query("SELECT skills FROM users WHERE id = ?", [req.session.userId], (err, results) => {
+                if (err) reject(err);
+                resolve(results);
+            });
+        });
+
+        const userSkills = results[0]?.skills ? results[0].skills.split(", ") : [];
+        const skillWiseJobs = {};
+
+        // Fetch job recommendations for each skill
+        for (const skill of userSkills) {
+            const jobs = await getJson({
+                engine: "google_jobs",
+                q: `${skill}`, // Search query for the skill
+                location: state, // Use the selected state
+                gl: "in", // Set the country code to India
+                hl: "en", // Language preference
+                api_key: "531df4679f22809587f6104be42f99f1b0004d2ce4ad1fea77ed31f55cb0ce66" // Replace with your SerpAPI key
+            });
+
+            if (jobs && jobs.jobs_results) {
+                // Add job link to each job result
+                const jobsWithLinks = jobs.jobs_results.map(job => ({
+                    title: job.title,
+                    company_name: job.company_name,
+                    location: job.location,
+                    link: job.related_links?.[0]?.link || job.link || `https://www.google.com/search?q=${encodeURIComponent(job.title + " " + job.company_name + " " + job.location)}` // Use the job link if available
+                }));
+
+                // Group jobs by skill
+                skillWiseJobs[skill] = jobsWithLinks;
+            }
+        }
+
+        res.json({ skillWiseJobs });
+    } catch (error) {
+        console.error("Error fetching job recommendations:", error);
+        res.status(500).json({ error: "Failed to fetch job recommendations" });
+    }
+});
+
+
+// Logout (unchanged)
 app.get("/logout", (req, res) => {
     req.session.destroy(() => res.redirect("/"));
 });
