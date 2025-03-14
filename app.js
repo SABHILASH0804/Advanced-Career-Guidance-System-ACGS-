@@ -100,6 +100,15 @@ const careerProgression =  {
     "Budgeting": ["Finance Assistant", "Budget Analyst", "Senior Budget Manager", "CFO"]
 };
 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "home.html"));
+});
+
+app.get("/login-page", (req, res) => {
+    console.log("Serving index.html"); // Debug log
+    res.sendFile(path.join(__dirname, "views", "index.html"));
+});
+
 // Home Page - Login & Signup (unchanged)
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "index.html"));

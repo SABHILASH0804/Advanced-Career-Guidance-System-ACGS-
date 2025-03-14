@@ -3,66 +3,436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="/public/style.css">
+    <title>Career Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/gojs/release/go.js"></script>
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --success: #10b981;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
             text-align: center;
-            margin: 50px;
-            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            color: var(--dark);
         }
-        h2 {
-            color: #333;
+        
+        .dashboard-header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 0;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+        }
+        
+        .dashboard-header::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+        
+        .page-title {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            font-weight: 400;
+            position: relative;
+            z-index: 2;
+        }
+        
         .container {
-            background: #fff;
-            padding: 20px;
+            background: white;
+            padding: 25px;
             margin: 20px auto;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            width: 90%;
             max-width: 1200px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .section-title {
+            color: var(--primary);
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-light);
+            position: relative;
+            text-transform: uppercase;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
         ul {
             list-style: none;
             padding: 0;
         }
+        
         li {
-            background: #e9ecef;
-            padding: 8px;
-            margin: 5px;
-            border-radius: 5px;
+            background: var(--light);
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+        
+        li:hover {
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateX(5px);
+        }
+        
         #myDiagramDiv {
             width: 100%;
             height: 600px;
-            border: 1px solid black;
+            border-radius: 12px;
+            border: 1px solid var(--gray-light);
             margin-top: 20px;
             background-color: white;
+            box-shadow: var(--shadow);
             overflow: hidden;
         }
+        
         .state-filter {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: inline-block;
+            transition: transform 0.3s ease;
         }
+        
+        .state-filter:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
         .state-filter label {
-            font-weight: bold;
-            margin-right: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-right: 15px;
+            color: var(--dark);
         }
+        
         .state-filter select {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: var(--light);
+            color: var(--dark);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .state-filter select:hover,
+        .state-filter select:focus {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+            background: var(--accent);
+        }
+        
+        .btn-secondary:hover {
+            background: #e89806;
+        }
+        
+        .upload-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .upload-form:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .file-input {
+            padding: 10px;
+            border: 2px dashed var(--gray-light);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: var(--light);
+            cursor: pointer;
+        }
+        
+        .file-input:hover,
+        .file-input:focus {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .section-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .section-box h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .logout-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary);
+            font-size: 16px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+        }
+        
+        .logout-link:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .loading-indicator {
+            color: var(--gray);
+            font-style: italic;
+        }
+        
+        .job-item {
+            display: flex;
+            flex-direction: column;
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .job-title {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        
+        .job-company {
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+        
+        .job-location {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .job-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .job-link i {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .job-link:hover {
+            color: var(--primary-dark);
+        }
+        
+        .job-link:hover i {
+            transform: translateX(3px);
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-tag:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .dashboard-footer {
+            margin-top: 30px;
+            padding: 20px 0;
+            background: var(--dark);
+            color: white;
+            text-align: center;
+        }
+        
+        .dashboard-footer p {
+            margin: 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .state-filter {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 90%;
+            }
+            
+            .state-filter select {
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .btn {
+                margin-top: 10px;
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
         }
     </style>
 </head>
 <body>
-    <h2>Welcome to Your Dashboard</h2>
+    <div class="dashboard-header">
+        <h1 class="page-title">ACGS</h1>
+        <p class="page-subtitle">Your personalized career guidance platform</p>
+    </div>
 
     <!-- State Filter Dropdown -->
-    <div class="state-filter">
-        <label for="state-select">Select State:</label>
+    <div class="state-filter fade-in">
+        <label for="state-select"><i class="fas fa-map-marker-alt"></i> Select Location:</label>
         <select id="state-select">
             <option value="India">All India</option>
             <option value="Andhra Pradesh">Andhra Pradesh</option>
@@ -93,43 +463,49 @@
             <option value="Uttar Pradesh">Uttar Pradesh</option>
             <option value="Uttarakhand">Uttarakhand</option>
             <option value="West Bengal">West Bengal</option>
-            
         </select>
-        <button onclick="fetchJobRecommendations()">Fetch Jobs</button>
+        <button class="btn" onclick="fetchJobRecommendations()">
+            <i class="fas fa-search"></i> Fetch Jobs
+          </button>
     </div>
 
-    <div class="container">
-        <h3>Your Extracted Skills:</h3>
-        <div id="skills-container">
-            <p id="skills-text">Loading skills...</p>
+
+    <div class="container fade-in">
+        <h3 class="section-title">Your Extracted Skills</h3>
+        <div id="skills-container" class="skills-grid">
+            <p id="skills-text" class="loading-indicator">Loading your skills...</p>
         </div>
     </div>
 
-    <div class="container">
-        <h3>Suggested Career Progression Paths:</h3>
+    <div class="container fade-in">
+        <h3 class="section-title">Suggested Career Progression Paths</h3>
         <div id="roles-container">
-            <p id="roles-text">Fetching career suggestions...</p>
+            <p id="roles-text" class="loading-indicator">Fetching career suggestions...</p>
         </div>
     </div>
 
-    <div class="container">
-        <h3>Job Recommendations:</h3>
+    <div class="container fade-in">
+        <h3 class="section-title">Job Recommendations</h3>
         <div id="jobs-container">
-            <p id="jobs-text">Fetching job recommendations...</p>
+            <p id="jobs-text" class="loading-indicator">Fetching job recommendations...</p>
         </div>
     </div>
 
-    <div class="container">
-        <h3>Career Progression Visualization:</h3>
+    <div class="container fade-in">
+        <h3 class="section-title">Career Progression Visualization</h3>
         <div id="myDiagramDiv"></div>
     </div>
 
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="resume" accept=".pdf" required>
-        <button type="submit">Upload Resume</button>
+    <form class="upload-form fade-in" action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="resume" accept=".pdf" required class="file-input">
+        <button type="submit" class="btn btn-secondary"><i class="fas fa-upload"></i> Upload Resume</button>
     </form>
 
-    <a href="/logout">Logout</a>
+    <a href="/logout" class="logout-link fade-in"><i class="fas fa-sign-out-alt"></i> Logout</a>
+
+    <div class="dashboard-footer">
+        <p>&copy; 2025 ACGS. All rights reserved.</p>
+    </div>
 
     <script>
         async function fetchSkillsAndRoles() {

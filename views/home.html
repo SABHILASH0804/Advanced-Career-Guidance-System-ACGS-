@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACGS - Professional Career Guidance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --success: #10b981;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            overflow-x: hidden;
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+        
+        /* Utility Classes */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background-color: #e89806;
+        }
+        
+        /* Header and Navigation */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 45px;
+        }
+        
+        .logo-text {
+            margin-left: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .phone {
+            display: flex;
+            align-items: center;
+            color: var(--dark);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .phone:hover {
+            color: var(--primary);
+        }
+        
+        .phone i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.1) 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.1);
+            z-index: 1;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.05);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+        
+        .tag-line {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tag-line::before {
+            content: '';
+            display: inline-block;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+            margin-right: 15px;
+        }
+        
+        .main-heading {
+            color: var(--dark);
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .main-heading span {
+            color: var(--primary);
+        }
+        
+        .sub-heading {
+            color: var(--gray);
+            font-size: 18px;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 60px 0;
+            background-color: white;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-text {
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+            text-align: center;
+            background-color: var(--light);
+        }
+        
+        .section-heading {
+            color: var(--primary);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .section-heading::before, .section-heading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 1px;
+            background-color: var(--primary);
+        }
+        
+        .section-heading::before {
+            left: -40px;
+        }
+        
+        .section-heading::after {
+            right: -40px;
+        }
+        
+        .section-title {
+            color: var(--dark);
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .section-description {
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+        
+        .services-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .service-card {
+            flex: 1;
+            min-width: 300px;
+            max-width: 350px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            font-size: 28px;
+            transition: all 0.3s;
+        }
+        
+        .service-card:hover .service-icon {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .service-title {
+            color: var(--dark);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .service-description {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .explore-btn {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .explore-btn i {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .explore-btn:hover {
+            color: var(--primary-dark);
+        }
+        
+        .explore-btn:hover i {
+            transform: translateX(3px);
+        }
+        
+        /* Testimonial Section */
+        .testimonials {
+            padding: 100px 0;
+            background-color: white;
+            text-align: center;
+        }
+        
+        .testimonial-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--light);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .testimonial-container::before {
+            content: '\201C';
+            font-size: 120px;
+            position: absolute;
+            top: -40px;
+            left: 20px;
+            color: rgba(37, 99, 235, 0.1);
+            font-family: Georgia, serif;
+        }
+        
+        .testimonial-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--dark);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .author-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .author-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info {
+            text-align: left;
+        }
+        
+        .author-name {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .author-title {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        /* About Us Section */
+.about-us {
+    padding: 100px 0;
+    background-color: var(--light);
+    text-align: center;
+}
+
+.about-mission {
+    max-width: 800px;
+    margin: 40px auto 60px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+}
+
+.about-mission:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.mission-title {
+    color: var(--primary);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.mission-text {
+    color: var(--gray);
+    line-height: 1.8;
+}
+
+.team-heading {
+    color: var(--dark);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.team-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.team-card {
+    flex: 1;
+    min-width: 250px;
+    max-width: 280px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+    box-shadow: var(--shadow);
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.team-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    border: 5px solid rgba(37, 99, 235, 0.1);
+    transition: all 0.3s;
+}
+
+.team-card:hover .team-image {
+    border-color: var(--primary);
+}
+
+.team-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.team-name {
+    color: var(--dark);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.team-position {
+    color: var(--primary);
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.team-social {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.team-social a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(37, 99, 235, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.team-social a:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateY(-3px);
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 1024px) {
+    .team-container {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .team-card {
+        min-width: 220px;
+    }
+}
+
+@media (max-width: 576px) {
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .team-card {
+        max-width: 100%;
+    }
+}
+        /* Call to Action Section */
+        .cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .cta-description {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-size: 18px;
+        }
+        
+        /* Upcoming Features Section */
+        .upcoming-features {
+            padding: 100px 0;
+            background-color: var(--light);
+            text-align: center;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            font-size: 28px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover .feature-icon {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .feature-title {
+            color: var(--dark);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo img {
+            height: 40px;
+        }
+        
+        .footer-logo-text {
+            margin-left: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .footer-about {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-heading {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .footer-links a i {
+            margin-right: 8px;
+            font-size: 12px;
+        }
+        
+        .contact-info-footer {
+            list-style: none;
+        }
+        
+        .contact-info-footer li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .contact-info-footer i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: var(--shadow);
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            bottom: 30px;
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+        
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fadeIn {
+            opacity: 0;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fadeIn.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+            
+            .tag-line {
+                justify-content: center;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .sub-heading {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav, .contact-info {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- Header and Navigation -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="N.jpeg" alt="ACGS Logo">
+                <span class="logo-text">ACGS</span>
+            </div>
+            
+            <nav>
+                <a href="#"><i class="fas fa-home"></i> Home</a>
+                <a href="#services">Services</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#about">About Us</a>
+                <a href="#contact">Contact Us</a>
+            </nav>
+            
+            <div class="contact-info">
+                <a href="tel:9108510058" class="phone">
+                    <i class="fas fa-phone-alt"></i>
+                    +91 9978795344
+                </a>
+                <a href="/login-page" class="btn">Log In / Sign Up</a>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <div class="hero-text fadeIn">
+                <p class="tag-line">DATA-DRIVEN CAREER GUIDANCE</p>
+                <h1 class="main-heading">Discover Your <span>Perfect Career Path</span> With Scientific Counselling</h1>
+                <p class="sub-heading">Unlock your potential with personalized career guidance backed by advanced analytics and industry expertise.</p>
+                <div class="hero-buttons">
+                    <a href="/login-page" class="btn btn-accent">Get Started Now</a>
+                    <a href="#services" class="btn btn-outline">Explore Services</a>
+                </div>
+            </div>
+            <div class="hero-image fadeIn">
+                <img src="Gemini_Generated_Image_lodsvtlodsvtlods-removebg-preview.png" alt="Career Guidance">
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container stats-container">
+            <div class="stat-item fadeIn">
+                <div class="stat-number">10,000+</div>
+                <div class="stat-text">Successful Placements</div>
+            </div>
+            <div class="stat-item fadeIn">
+                <div class="stat-number">95%</div>
+                <div class="stat-text">Satisfaction Rate</div>
+            </div>
+            <div class="stat-item fadeIn">
+                <div class="stat-number">500+</div>
+                <div class="stat-text">Corporate Partners</div>
+            </div>
+            <div class="stat-item fadeIn">
+                <div class="stat-number">24/7</div>
+                <div class="stat-text">Expert Support</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h3 class="section-heading fadeIn">OUR SERVICES</h3>
+            <h2 class="section-title fadeIn">Comprehensive Solutions for Your Career Journey</h2>
+            <p class="section-description fadeIn">We offer a range of tailored services designed to help you navigate your career path with confidence and clarity.</p>
+            
+            <div class="services-container">
+                <!-- Resume Optimization -->
+                <div class="service-card fadeIn">
+                    <div class="service-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="service-title">Resume Optimization</h3>
+                    <p class="service-description">Transform your resume with AI-powered analysis that highlights your strengths and skills, making you stand out to potential employers.</p>
+                    <a href="/login-page" class="explore-btn">
+                        Start Now
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- AI Job Matching -->
+                <div class="service-card fadeIn">
+                    <div class="service-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 class="service-title">AI Job Matching</h3>
+                    <p class="service-description">Our advanced algorithm finds perfect job matches aligned with your skills, experience, and career aspirations for targeted opportunities.</p>
+                    <a href="/login-page" class="explore-btn">
+                        Start Now
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- Career Pathway -->
+                <div class="service-card fadeIn">
+                    <div class="service-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h3 class="service-title">Career Pathway</h3>
+                    <p class="service-description">Chart your professional journey with customized career roadmaps and expert guidance to achieve your long-term goals.</p>
+                    <a href="/login-page" class="explore-btn">
+                        Start Now
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Upcoming Features Section -->
+    <section class="upcoming-features">
+        <div class="container">
+            <h3 class="section-heading fadeIn">UPCOMING FEATURES</h3>
+            <h2 class="section-title fadeIn">Exciting New Features Coming Soon</h2>
+            <p class="section-description fadeIn">Stay tuned for these innovative features designed to enhance your career journey.</p>
+            
+            <div class="services-container">
+                <!-- Skill Gap Analysis -->
+                <div class="feature-card fadeIn">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Skill Gap Analysis</h3>
+                    <p class="feature-description">Identify and bridge the gaps in your skillset with our advanced analysis tools to stay ahead in your career.</p>
+                </div>
+                
+                <!-- Virtual Career Fairs -->
+                <div class="feature-card fadeIn">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Virtual Career Fairs</h3>
+                    <p class="feature-description">Connect with top employers and explore opportunities through our immersive virtual career fairs.</p>
+                </div>
+                
+                <!-- Personalized Learning Paths -->
+                <div class="feature-card fadeIn">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="feature-title">Personalized Learning Paths</h3>
+                    <p class="feature-description">Access customized learning resources and courses tailored to your career goals and interests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonial Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h3 class="section-heading fadeIn">TESTIMONIALS</h3>
+            <h2 class="section-title fadeIn">What Our Clients Say</h2>
+            <p class="section-description fadeIn">Hear about the transformative experiences from professionals who've benefited from our career guidance services.</p>
+            
+            <div class="testimonial-container fadeIn">
+                <p class="testimonial-text">"ACGS completely transformed my job search. Their personalized approach and AI-driven recommendations helped me land my dream job at a leading tech company. The career counselors were exceptionally knowledgeable and supportive throughout the entire process."</p>
+                <div class="testimonial-author">
+                    <div class="author-image">
+                        <img src="download.jpeg" alt="Testimonial Author">
+                    </div>
+                    <div class="author-info">
+                        <h4 class="author-name">Sraddha S</h4>
+                        <p class="author-title">Dance Master, Chingavanam</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="about-us" id="about">
+        <div class="container">
+            <h3 class="section-heading fadeIn">ABOUT US</h3>
+            <h2 class="section-title fadeIn">Who We Are</h2>
+            <p class="section-description fadeIn">We are an innovative career guidance platform dedicated to empowering individuals in their professional journey. Our AI-powered system helps job seekers find suitable opportunities and enhance their skills through personalized recommendations.</p>
+            
+            <div class="about-mission fadeIn">
+                <h3 class="mission-title">Our Mission</h3>
+                <p class="mission-text">To bridge the gap between job seekers and their ideal career paths by providing data-driven insights, AI-powered job matching, and tailored skill development recommendations.</p>
+            </div>
+            
+            <h3 class="team-heading fadeIn">Our Team</h3>
+            <div class="team-container">
+                <!-- Team Member 1 -->
+                <div class="team-card fadeIn">
+                    <div class="team-image">
+                        <img src="don.jpg" alt="Varun S">
+                    </div>
+                    <h3 class="team-name">Varun S</h3>
+                    <p class="team-position">Founder</p>
+                    <div class="team-social">
+                        <a href="https://www.linkedin.com/in/varun-s-898433258/"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/v7run?utm_source=qr&igsh=MW1veWttcmQ0eXFjYg=="><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/Vs2928"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="team-card fadeIn">
+                    <div class="team-image">
+                        <img src="jithu.jpg" alt="S Abhijith">
+                    </div>
+                    <h3 class="team-name">S Abhijith</h3>
+                    <p class="team-position">Manager</p>
+                    <div class="team-social">
+                        <a href="https://www.linkedin.com/in/s-abhijith-673773283/"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/ss.jithu_1?igsh=MTNnZGI0emtuanp4Zw=="><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/SABHIJITH0804"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="team-card fadeIn">
+                    <div class="team-image">
+                        <img src="abhi.jpg" alt="S Abhilash">
+                    </div>
+                    <h3 class="team-name">S Abhilash</h3>
+                    <p class="team-position">CEO</p>
+                    <div class="team-social">
+                        <a href="https://www.linkedin.com/in/s-abhilash-3ba8aa283/"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/ss.abhi_2?igsh=MWdqcmEwYXl2ejVlNw=="><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/SABHILASH0804"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="team-card fadeIn">
+                    <div class="team-image">
+                        <img src="sraddha.jpg" alt="Sraddha S">
+                    </div>
+                    <h3 class="team-name">Sraddha S</h3>
+                    <p class="team-position">Marketing Director,Advisor</p>
+                    <div class="team-social">
+                        <a href="https://www.linkedin.com/in/sraddha-s-b52374255/"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/_sraddha_/"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/sraddhas"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Call to Action Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2 class="cta-title fadeIn">Ready to Accelerate Your Career?</h2>
+            <p class="cta-description fadeIn">Join thousands of professionals who have transformed their careers with our scientific approach to career guidance.</p>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <img src="N.jpeg" alt="ACGS Logo">
+                        <span class="footer-logo-text">ACGS</span>
+                    </div>
+                    <p class="footer-about">ACGS is a leading career guidance platform that empowers individuals to achieve their professional goals through data-driven insights and expert support.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li><a href="#testimonials"><i class="fas fa-chevron-right"></i> Testimonials</a></li>
+                        <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Contact Info</h4>
+                    <ul class="contact-info-footer">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Career Lane, Success City, SC 12345</li>
+                        <li><i class="fas fa-phone-alt"></i> +91 9978795344</li>
+                        <li><i class="fas fa-envelope"></i> info@acgs.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 ACGS. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        // Intersection Observer for Scroll Animations
+        const fadeInElements = document.querySelectorAll('.fadeIn');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        fadeInElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth Scroll for Navigation Links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
