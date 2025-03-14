@@ -286,4 +286,17 @@ app.get("/logout", (req, res) => {
     req.session.destroy(() => res.redirect("/"));
 });
 
+// Serve static files (CSS, JS, images, etc.)
+app.use(express.static(path.join(__dirname, 'public'))); // If you have a public folder
+
+// Serve index.html at the root
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve home.html from the views folder
+app.get('/home.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'home.html'));
+});
+
 app.listen(3000, () => console.log("✅ Server running on port 3000"));
